@@ -11,10 +11,9 @@ class Block:
         self.hash = self.calculate_hash()
 
     def calculate_hash(self):
-        # Hash only the block’s contents, not the hash itself
         block_content = {
             "index": self.index,
-            "timestamp": str(self.timestamp),  # convert datetime to string
+            "timestamp": str(self.timestamp),
             "data": self.data,
             "previous_hash": self.previous_hash
         }
@@ -38,8 +37,6 @@ class Blockchain:
         for i in range(1, len(self.chain)):
             curr = self.chain[i]
             prev = self.chain[i - 1]
-            if curr.hash != curr.calculate_hash():
-                return False
-            if curr.previous_hash != prev.hash:
+            if curr.hash != curr.calculate_hash() or curr.previous_hash != prev.hash:
                 return False
         return True

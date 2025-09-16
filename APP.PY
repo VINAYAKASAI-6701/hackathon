@@ -258,6 +258,10 @@ dash_app.layout = html.Div([
     ], style={'marginBottom':'40px'})
 ], style={'padding':'20px','fontFamily':'Arial, sans-serif'})
 
-# -------------------- Run Server -------------------- #
 if __name__ == "__main__":
-    server.run(debug=True, host="0.0.0.0", port=5000)
+    server.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
+# -------------------- Run Server -------------------- #
+#if __name__ == "__main__":
+ #   server.run(debug=True, host="0.0.0.0", port=5000)
+#

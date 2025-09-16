@@ -1,0 +1,7 @@
+Flask==2.3.2
+dash==2.15.0
+plotly==5.20.0
+pandas==2.1.1
+numpy==1.26.0
+scikit-learn==1.3.2
+joblib==1.3.2

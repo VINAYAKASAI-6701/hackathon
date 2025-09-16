@@ -1,12 +1,11 @@
 import subprocess
 import sys
 
-# Make sure scripts match actual file names in hackathon\hackathon
 scripts = [
-    "DATA_PROCESSING..py",   # keep the double dots if your file really has it
-    "MODEL_TRAINING.py",
+    "dataprocessing.py",
+    "modeltraining.py",
     "blockchain.py",
-    "APP.py"
+    "app.py"
 ]
 
 for script in scripts:

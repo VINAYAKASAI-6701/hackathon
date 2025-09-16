@@ -8,7 +8,6 @@ import joblib
 
 VALID_CARRIERS = {'C1', 'C2', 'C3'}
 
-# -------------------- Feature Engineering -------------------- #
 def build_features_for_training(dataset: pd.DataFrame) -> pd.DataFrame:
     latitude = dataset.get('latitude', pd.Series([17.385] * len(dataset)))
     longitude = dataset.get('longitude', pd.Series([78.4867] * len(dataset)))
@@ -18,8 +17,7 @@ def build_features_for_training(dataset: pd.DataFrame) -> pd.DataFrame:
     carrier_verified = dataset['carrier_verified']
 
     temp_anomaly = ((temp < 2) | (temp > 10)).astype(int)
-    location_anomaly = (((latitude - 17.385).abs() > 0.5) |
-                        ((longitude - 78.4867).abs() > 0.5)).astype(int)
+    location_anomaly = (((latitude - 17.385).abs() > 0.5) | ((longitude - 78.4867).abs() > 0.5)).astype(int)
 
     pickup_hub = dataset['pickup hub id']
     delivery_hub = dataset['Delivery Success Hub ID']
@@ -47,15 +45,11 @@ def build_features_for_training(dataset: pd.DataFrame) -> pd.DataFrame:
         'to_address2': to_addr
     })
 
-# -------------------- Preprocessing -------------------- #
 def preprocess_and_label(dataset: pd.DataFrame) -> pd.DataFrame:
     for col in ['Creation Datetime', 'Delivery Success Datetime']:
         dataset[col] = pd.to_datetime(dataset[col], errors='coerce')
 
-    dataset['delivery_time_mins'] = (
-        dataset['Delivery Success Datetime'] - dataset['Creation Datetime']
-    ).dt.total_seconds() / 60
-
+    dataset['delivery_time_mins'] = (dataset['Delivery Success Datetime'] - dataset['Creation Datetime']).dt.total_seconds() / 60
     dataset['carrier_verified'] = dataset.get('Carrier ID', pd.Series([0] * len(dataset))).isin(VALID_CARRIERS).astype(int)
 
     dataset['Granular Status'] = pd.to_numeric(dataset['Granular Status'], errors='coerce').fillna(0)
@@ -75,18 +69,14 @@ def preprocess_and_label(dataset: pd.DataFrame) -> pd.DataFrame:
 
     return dataset
 
-# -------------------- Model Training -------------------- #
-def train_and_save_model(dataset: pd.DataFrame, target_col: str,
-                         model_path: str, scaler_path: str, output_csv: str):
+def train_and_save_model(dataset: pd.DataFrame, target_col: str, model_path: str, scaler_path: str, output_csv: str):
     X = build_features_for_training(dataset)
     y = dataset[target_col]
 
     imputer = SimpleImputer(strategy='mean')
     X_imputed = imputer.fit_transform(X)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_imputed, y, test_size=0.2, random_state=42, stratify=y
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, test_size=0.2, random_state=42, stratify=y)
 
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
@@ -109,7 +99,7 @@ def train_and_save_model(dataset: pd.DataFrame, target_col: str,
     dataset.to_csv(output_csv, index=False)
     print(f"✅ Saved dataset with fraud predictions to {output_csv}")
 
-# -------------------- Main -------------------- #
+
 if __name__ == "__main__":
     dataset_path = r"C:\Users\Nagasai\Downloads\fraud-pulse-ai-main\hackathon\hackathon\dataset.csv"
     output_csv = r"C:\Users\Nagasai\Downloads\fraud-pulse-ai-main\hackathon\hackathon\dataset_with_fraud.csv"
