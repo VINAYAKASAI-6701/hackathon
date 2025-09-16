@@ -1,7 +1,8 @@
-Flask==2.3.2
-dash==2.15.0
-plotly==5.20.0
+Flask==2.3.3
+dash==2.14.1
 pandas==2.1.1
-numpy==1.26.0
+numpy==1.26.2
 scikit-learn==1.3.2
 joblib==1.3.2
+plotly==5.22.0
+geopy==2.3.0
